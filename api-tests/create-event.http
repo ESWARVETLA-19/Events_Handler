@@ -1,9 +1,9 @@
-# POST http://shiny-space-fortnight-5jpgvqp6696c56w-8080.app.github.dev/events
-# context-type: application/json
+ POST http://localhost:8080/events
+ content-type: application/json
 
-# {
-#     "name":"Test event",
-#     "description":"A test event",
-#     "location":"a test location",
-#     "dateTime": "2025-01-01T15:33:00.000GMT"
-# }
+ {
+    "name": "Test event",
+    "description": "A test event",
+    "location": "a test location",
+    "dateTime": "2025-01-01T15:33:00.000Z"
+}

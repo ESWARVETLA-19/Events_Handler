@@ -2,10 +2,13 @@ package main
 
 import (
 	"net/http"
+	"rest_api/project/db"
 	"rest_api/project/models"
+
 	"github.com/gin-gonic/gin"
 )
 func main(){
+	db.InitDB()
 	server:=gin.Default()
 	server.GET("/events",getEvenets)
 	server.POST("/events",createEvent)
@@ -23,10 +26,12 @@ func createEvent(context *gin.Context){
 
 	if err!=nil{
 		context.JSON(http.StatusBadRequest,gin.H{"message":"could not parse data"})
+		return 
 	}
 
 	event.Id=1
 	event.UserId=1
+	event.Save()
 	context.JSON(http.StatusCreated, gin.H{"message": "created event!","event":event})
 
 }
