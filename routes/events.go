@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 	// "rest_api/project/db"
+	"fmt"
 	"rest_api/project/models"
 	"strconv"
 	"github.com/gin-gonic/gin"
@@ -74,6 +75,31 @@ func UpdateEvent(context *gin.Context){
 		return
 	}
 	updatedEvent.ID=id
-	updatedEvent.Update()
+	err=updatedEvent.Update()
+	if err!=nil{
+		context.JSON(http.StatusInternalServerError,gin.H{"message":"Could not Update event"})
+		return 
+	}
+	context.JSON(http.StatusOK,gin.H{"message":"Event Updated Successfully"})
 }
 	
+
+
+func DeleteEvent(context *gin.Context){
+	id,err:=strconv.ParseInt(context.Param("id"),10,64)
+	if err!=nil{
+		context.JSON(http.StatusBadRequest,gin.H{"message":"Invalid event id"})
+		return
+	}
+	event,err:=models.GetEvent(id)
+	if err!=nil{
+		context.JSON(http.StatusInternalServerError,gin.H{"message":"Could not fetch data"})
+		return
+	}
+	err=event.Delete()
+	if err!=nil{
+		context.JSON(http.StatusInternalServerError,gin.H{"message":"Could not delete data"})
+		return
+	}
+	context.JSON(http.StatusOK,gin.H{"message": fmt.Sprintf("Event with id (%d) deleted", event.ID)})
+}

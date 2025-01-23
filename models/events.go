@@ -2,8 +2,9 @@ package models
 
 import (
 	"rest_api/project/db"
-	// "rest_api/project/models"
 	"time"
+
+	// "github.com/gin-gonic/gin"
 )
 
 
@@ -85,4 +86,16 @@ func (event Event) Update()error{
 	defer stmt.Close()
 	_,err=stmt.Exec(event.Name,event.Description,event.Location,event.DateTime)
 	return err
+}
+
+func (event Event) Delete() error{
+	query:="DELETE FROM items WHERE id = ?"
+	stmt,err:=db.DB.Prepare(query)
+	if err!=nil{
+		return err
+	}
+	defer stmt.Close()
+	_,err=stmt.Exec(event.ID)
+	return err
+
 }
