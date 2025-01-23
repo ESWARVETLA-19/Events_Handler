@@ -1,8 +1,9 @@
 package models
 
 import (
-	"time"
 	"rest_api/project/db"
+	// "rest_api/project/models"
+	"time"
 )
 
 
@@ -69,4 +70,19 @@ func GetEvent(id int64) (*Event, error) {
 		return nil, err
 	}
 	return &event, err
+}
+
+func (event Event) Update()error{
+	query:=`
+			UPDATE events
+			SET name=?,descripton=?,location=?,dateTime=?
+			WHERE id=?
+	`
+	stmt,err:=db.DB.Prepare(query)
+	if err!=nil{
+		return err
+	}
+	defer stmt.Close()
+	_,err=stmt.Exec(event.Name,event.Description,event.Location,event.DateTime)
+	return err
 }
