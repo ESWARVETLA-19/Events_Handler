@@ -35,7 +35,7 @@ func (user User) Save() error{
 
 }
 
-func (user User) ValidateCreds()error{
+func (user *User) ValidateCreds()error{
 	query:="SELECT id,password from users where email=?"
 	row:=db.DB.QueryRow(query,user.Email)
 	var retrivedpassword string

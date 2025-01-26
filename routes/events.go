@@ -2,10 +2,12 @@ package routes
 
 import (
 	"net/http"
-	// "rest_api/project/db"
+	
+
 	"fmt"
 	"rest_api/project/models"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,21 +36,17 @@ func GetEventByID(context *gin.Context){
 }
 
 func CreateEvent(context *gin.Context) {
-	token:=context.Request.Header.Get("Authorization")
-	if token==""{
-		context.JSON(http.StatusUnauthorized,gin.H{"message":"unauthorized"})
-		return 
-	}
+	
 	var event models.Event
-	err := context.ShouldBindJSON(&event)
+	err:= context.ShouldBindJSON(&event)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
 		return
 	}
 
-	event.ID = 1
-	event.UserID = 1
+	userId:=context.GetInt64("userId")
+	event.UserID = userId
 
 	err = event.Save()
 
@@ -67,11 +65,18 @@ func UpdateEvent(context *gin.Context){
 		context.JSON(http.StatusBadRequest,gin.H{"message":"Invalid event id"})
 		return
 	}
-	_,err=models.GetEvent(id)
+	userID:=context.GetInt64("userId")
+	event,err:=models.GetEvent(id)
 	if err!=nil{
 		context.JSON(http.StatusInternalServerError,gin.H{"message":"Could not fetch data"})
 		return
 	}
+
+	if event.UserID!=userID{
+		context.JSON(http.StatusUnauthorized,gin.H{"message":"Unauthorized"})
+		return
+	}
+
 	var updatedEvent models.Event
 	err = context.ShouldBindJSON(&updatedEvent)
 
@@ -99,6 +104,11 @@ func DeleteEvent(context *gin.Context){
 	event,err:=models.GetEvent(id)
 	if err!=nil{
 		context.JSON(http.StatusInternalServerError,gin.H{"message":"Could not fetch data"})
+		return
+	}
+	userID:=context.GetInt64("userId")
+	if event.UserID!=userID{
+		context.JSON(http.StatusUnauthorized,gin.H{"message":"Unauthorized"})
 		return
 	}
 	err=event.Delete()

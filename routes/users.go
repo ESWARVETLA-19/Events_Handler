@@ -23,7 +23,7 @@ func SignUp(context *gin.Context){
 		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{"message": "Event created!"})
+	context.JSON(http.StatusCreated, gin.H{"message": "User created!"})
 }
 
 func Login(context *gin.Context){
