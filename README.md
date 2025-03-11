@@ -9,7 +9,7 @@ This is a **Go-based REST API** project. Follow the steps below to set up and ru
 Clone the repository and navigate into the project directory:  
 
 ```sh
-git clone https://github.com/ESWARVETLA-19/Rest_API_GO.git
+git clone https://github.com/ESWARVETLA-19/Events_Handler.git
 cd Events_Handler
 ```
 
