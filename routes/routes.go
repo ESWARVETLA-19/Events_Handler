@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoues(server *gin.Engine){
+func RegisterRoutes(server *gin.Engine){
 	server.GET("/events", GetEvents) //route to get all events  // GET, POST, PUT, PATCH, DELETE
 	server.GET("/events/:id", GetEventByID)//route to get event by single id
 	authentication:=server.Group("/")
