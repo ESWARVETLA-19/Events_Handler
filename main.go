@@ -13,7 +13,7 @@ func main() {
 	server := gin.Default()
 
 
-	routes.RegisterRoues(server)
+	routes.RegisterRoutes(server)
 	server.Run(":8080") 
 
 }
